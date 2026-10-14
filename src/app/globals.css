@@ -1590,10 +1590,10 @@ a.card:focus-visible {
 
 /* ---------- Case-study page ---------- */
 .cs-head {
-  padding: 36px 0 28px;
+  padding-block: 36px 28px;
 }
 @media (min-width: 768px) {
-  .cs-head { padding: 52px 0 36px; }
+  .cs-head { padding-block: 52px 36px; }
 }
 .back {
   display: inline-flex;
@@ -2054,7 +2054,7 @@ figcaption {
 
 /* 404 */
 .nf {
-  padding: 96px 0 120px;
+  padding-block: 96px 120px;
   text-align: center;
 }
 .nf h1 {

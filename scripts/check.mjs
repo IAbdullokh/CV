@@ -100,6 +100,15 @@ async function checkPage(browser, path) {
         return { scroll: document.documentElement.scrollWidth, vw, offenders };
       });
       if (overflow.scroll > overflow.vw) fail(`horizontal scroll on ${where}: ${overflow.scroll}px > ${overflow.vw}px (${overflow.offenders.join(", ")})`);
+      // text must keep the page gutter: nothing readable may start at the screen edge
+      const edge = await page.evaluate(() =>
+        [...document.querySelectorAll("main h1, main h2, main p, footer span, .back")]
+          .filter((el) => el.getBoundingClientRect().width > 0)
+          .filter((el) => el.getBoundingClientRect().left < 12)
+          .map((el) => `${el.tagName.toLowerCase()} "${el.textContent.trim().slice(0, 30)}"`)
+          .slice(0, 3),
+      );
+      if (edge.length) fail(`text touches the screen edge on ${where}: ${edge.join(", ")}`);
       const running = await page.evaluate(() => document.getAnimations().filter((a) => a.playState === "running").length);
       if (running) fail(`${running} animations still running with reduced motion on ${where}`);
       if (vp.name !== "768") {
